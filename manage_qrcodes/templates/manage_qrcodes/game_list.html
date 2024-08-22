@@ -1,0 +1,147 @@
+{% extends 'base.html' %}
+
+{% block title %}Game List{% endblock %}
+
+{% block extra_css %}
+
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f2f5;
+            color: #333;
+        }
+        h1 {
+            text-align: center;
+            color: #444;
+            padding: 20px;
+            font-size: 2.5em;
+        }
+        .top-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 20px 0;
+        }
+        .top-container a {
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            color: #fff;
+            font-weight: bold;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            background-color: #4CAF50; /* Green */
+        }
+        .top-container a:hover {
+            background-color: #45a049;
+            transform: scale(1.05);
+        }
+        .search-container {
+            text-align: center;
+            margin: 20px auto;
+        }
+        .search-bar {
+            padding: 10px;
+            width: 50%;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            font-size: 16px;
+        }
+        table {
+            width: 80%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            background-color: #ffffff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        thead {
+            background-color: #4CAF50;
+            color: white;
+        }
+        th, td {
+            padding: 15px;
+            text-align: left;
+        }
+        tbody tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        tbody tr:hover {
+            background-color: #e0e0e0;
+        }
+        img {
+            max-width: 100px;
+            height: auto;
+            border-radius: 8px;
+        }
+        a {
+            text-decoration: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            color: #fff;
+            font-weight: bold;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            display: inline-block;
+        }
+        .edit-btn {
+            background-color: #FFC107; /* Amber */
+            color: black;
+        }
+        .edit-btn:hover {
+            background-color: #FFB300;
+            transform: scale(1.05);
+        }
+        .delete-btn {
+            background-color: #F44336; /* Red */
+        }
+        .delete-btn:hover {
+            background-color: #D32F2F;
+            transform: scale(1.05);
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <h1>Game List</h1>
+    <div class="top-container">
+        <a href="{% url 'qrcodes:upload_qr_codes' %}">Add QR Code</a>
+    </div>
+    <div class="search-container">
+        <input type="text" id="searchBar" class="search-bar" placeholder="Search for games...">
+    </div>
+    <table id="gameTable">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Image</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for game in games %}
+            <tr>
+                <td>{{ game.name }}</td>
+                <td><img src="{{ game.image.url }}" alt="{{ game.name }}"></td>
+                <td>
+                    <a href="{% url 'manage_qrcodes:game_edit' game.pk %}" class="edit-btn">Edit</a>
+                    <a href="{% url 'manage_qrcodes:game_delete' game.pk %}" class="delete-btn">Delete</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <script>
+        document.getElementById('searchBar').addEventListener('input', function() {
+            const query = this.value.toLowerCase();
+            const rows = document.querySelectorAll('#gameTable tbody tr');
+
+            rows.forEach(row => {
+                const nameCell = row.querySelector('td:first-child').textContent.toLowerCase();
+                row.style.display = nameCell.includes(query) ? '' : 'none';
+            });
+        });
+    </script>
+{% endblock %}

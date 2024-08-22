@@ -1,0 +1,271 @@
+<!-- templates/qrcodes/upload_qr_codes.html -->
+{% extends 'base.html' %}
+
+{% block title %}Generate Qr Code{% endblock %}
+
+{% block extra_css %}
+    <style>
+        /* General styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        /* Form container */
+        .form-container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Form labels */
+        .form-container label {
+            display: block;
+            margin-bottom: 10px;
+            color: #555;
+        }
+
+        /* Form inputs */
+        .form-container input[type="text"], 
+        .form-container input[type="file"], 
+        .form-container input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        /* File input special styles */
+        .form-container input[type="file"] {
+            padding: 3px;
+        }
+
+        /* Submit buttons */
+        .form-container button[type="submit"],
+        .form-container button[type="button"] {
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-top: 10px; /* Space between buttons */
+        }
+
+        /* Submit button hover effect */
+        .form-container button[type="submit"]:hover,
+        .form-container button[type="button"]:hover {
+            background-color: #45a049;
+        }
+
+        /* File input specific styles */
+        .form-container input[type="file"] {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #fff;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            box-sizing: border-box;
+            position: relative; /* Ensure positioning context */
+            overflow: hidden; /* Hide default file input button */
+        }
+
+        /* File input hover effect */
+        .form-container input[type="file"]:hover {
+            border-color: #007bff;
+        }
+
+        /* File input focus effect */
+        .form-container input[type="file"]:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+        }
+
+        /* Customizing the file selector button */
+        .form-container input[type="file"]::file-selector-button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            position: absolute;
+            right: 0;
+            top: 0;
+            margin: 0;
+            height: 100%;
+            opacity: 0;
+        }
+
+        /* Style the label for file input */
+        .form-container label[for="image_folder"] {
+            display: block;
+            margin-bottom: 10px;
+            color: #555;
+        }
+
+        /* Adjust file input padding for different states */
+        .form-container input[type="file"]:not(:focus):not(:hover) {
+            padding: 10px;
+        }
+
+        /* Link field styles */
+        .link-field {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .link-field input[type="text"] {
+    flex-grow: 1;
+    margin-right: 10px;
+    padding: 15px; /* Increase padding for larger input */
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-size: 18px; /* Increase font size if needed */
+}
+
+
+        .link-field .add-link-button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        .link-field .add-link-button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Success notification */
+        #success-notification {
+            display: none;
+            background-color: #d4edda;
+            color: #155724;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #c3e6cb;
+            border-radius: 5px;
+        }
+
+
+        /* Style for the download button */
+.download-button {
+    width: 100%;
+    
+    display: inline-block;
+    background-color: #45a049;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+    text-align: center;
+    text-decoration: none; /* Remove underline from link */
+    transition: background-color 0.3s;
+}
+
+.download-button:hover {
+    background-color: #9bec9e;
+}
+
+/* Style for centering headings */
+.centered-heading {
+    text-align: center;
+}
+/* Style for centering images */
+.centered-image {
+    display: block;
+    margin: 0 auto;
+}
+
+.redirect-button {
+    text-align: center;
+    width: 93%;
+    display: inline-block;
+    padding: 10px 20px;
+    margin: 10px 0;
+    font-size: 16px;
+    color: white;
+    background-color: #45a049;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+.redirect-button:hover {
+    background-color: #9bec9e;
+}
+
+    </style>
+    {% endblock %}
+
+{% block content %}
+
+    <div id="success-notification">QR Code Upload to Database successfully!</div>
+
+    <h1>Generate QR Code</h1>
+    <div class="form-container">
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Generate</button>
+        </form>
+
+        <div id="success-notification">QR Code saved successfully!</div>
+
+        {% if qr_image_url %}
+            <h2 class="centered-heading">QR Code</h2>
+
+            <img src="{{ qr_image_url }}" alt="QR Code" class="centered-image">
+
+            <br>
+            <a href="{% url 'qrcode_generator:download_qr' %}" class="download-button" download>Download QR Code</a>
+
+            <form method="post" action="{% url 'qrcode_generator:save_qr_to_db' %}">
+                {% csrf_token %}
+                <button type="submit">Save QR Code to Database</button>
+            </form>
+        {% endif %}
+ 
+
+ 
+
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var qrSavedSuccess = {{ qr_saved_success|lower|safe }};
+            if (qrSavedSuccess) {
+                var notification = document.getElementById("success-notification");
+                notification.style.display = "block";
+                setTimeout(function() {
+                    notification.style.display = "none";
+                }, 3000);
+            }
+        });
+    </script>
+{% endblock %}

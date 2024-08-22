@@ -1,0 +1,100 @@
+<!-- templates/qrcodes/upload_qr_codes.html -->
+{% extends 'base.html' %}
+
+{% block title %}Upload QR Codes{% endblock %}
+
+{% block extra_css %}
+<style>
+    body {
+        font-family: 'Arial', sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f0f2f5;
+        color: #333;
+    }
+    .container {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    h2 {
+        text-align: center;
+        color: #444;
+        padding: 20px;
+    }
+    form {
+        display: flex;
+        flex-direction: column;
+    }
+    label {
+        margin: 10px 0 5px 0;
+    }
+    input[type="file"],
+    input[type="number"] {
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        margin-bottom: 15px;
+    }
+    button[type="submit"] {
+        padding: 10px 20px;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background-color 0.3s ease;
+    }
+    button[type="submit"]:hover {
+        background-color: #45a049;
+    }
+    .top-container {
+        text-align: center;
+        margin: 20px 0;
+    }
+    .top-container a {
+        text-decoration: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        color: #fff;
+        font-weight: bold;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+        background-color: #4CAF50; /* Green */
+    }
+    .top-container a:hover {
+        background-color: #45a049;
+        transform: scale(1.05);
+    }
+</style>{% endblock %}
+
+{% block content %}
+    <div class="top-container">
+        <a href="{% url 'manage_qrcodes:game_list' %}">Manage Existing QR Codes</a>
+    </div>
+    <div class="container">
+        <h2>Upload QR Codes</h2>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            <!-- Upload Folder Section -->
+            <label for="image_folder">Pick a folder of QR code images</label>
+            <input type="file" id="image_folder" name="image_folder" webkitdirectory directory multiple><br><br>
+
+            <!-- Upload Images Section -->
+            <label for="image_files">Or pick one or more QR code images</label>
+            <input type="file" id="image_files" name="image_files" multiple><br><br>
+
+            <label for="height">Resize dimensions (height in pixels)</label>
+            <input type="number" id="height" name="height" value="230"><br><br>
+
+            <label for="width">Resize dimensions (width in pixels)</label>
+            <input type="number" id="width" name="width" value="186"><br><br>
+
+            <button type="submit">Upload QR Codes</button>
+        </form>
+    </div>
+{% endblock %}

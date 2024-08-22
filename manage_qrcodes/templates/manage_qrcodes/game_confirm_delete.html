@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Confirm Delete</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f2f5;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 400px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #444;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        button[type="submit"] {
+            padding: 10px 20px;
+            background-color: #F44336; /* Red */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #D32F2F;
+        }
+
+        .btn {
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            color: white;
+            font-weight: bold;
+            display: inline-block;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .cancel-btn {
+            background-color: #2196F3; /* Blue */
+        }
+
+        .cancel-btn:hover {
+            background-color: #1e88e5;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Are you sure you want to delete "{{ game.name }}"?</h1>
+        <form method="post">
+            {% csrf_token %}
+            <div class="button-container">
+                <a href="{% url 'manage_qrcodes:game_list' %}" class="btn cancel-btn">Cancel</a>
+              
+                <button type="submit">Delete</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

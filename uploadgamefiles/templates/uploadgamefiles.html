@@ -1,0 +1,275 @@
+<!-- templates/qrcodes/upload_qr_codes.html -->
+{% extends 'base.html' %}
+
+{% block title %}Upload Game Files{% endblock %}
+
+{% block extra_css %}
+ 
+    <style>
+        /* General styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+
+        }
+        #game_name {
+            text-transform: uppercase;
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+
+        /* Form container */
+        form {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Form labels */
+        form label {
+            display: block;
+            margin-bottom: 10px;
+            color: #555;
+        }
+
+        /* Form inputs */
+        form input[type="text"], form input[type="file"], form input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        /* File input special styles */
+        form input[type="file"] {
+            padding: 3px;
+        }
+
+        /* Submit button */
+        form button[type="submit"], button[type="button"] {
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-top: 10px; /* Added margin for space between buttons */
+        }
+
+        /* Submit button hover effect */
+        form button[type="submit"]:hover, button[type="button"]:hover {
+            background-color: #45a049;
+        }
+
+        /* File input specific styles */
+        form input[type="file"] {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #fff;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            box-sizing: border-box;
+            position: relative; /* Ensure positioning context */
+            overflow: hidden; /* Hide default file input button */
+        }
+
+        /* File input hover effect */
+        form input[type="file"]:hover {
+            border-color: #007bff;
+        }
+
+        /* File input focus effect */
+        form input[type="file"]:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+        }
+
+        /* Customizing the file selector button */
+        form input[type="file"]::file-selector-button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            position: absolute;
+            right: 0;
+            top: 0;
+            margin: 0;
+            height: 100%;
+            opacity: 0;
+        }
+
+        /* Style the label for file input */
+        form label[for="image_folder"] {
+            display: block;
+            margin-bottom: 10px;
+            color: #555;
+        }
+
+        /* Adjust file input padding for different states */
+        form input[type="file"]:not(:focus):not(:hover) {
+            padding: 10px;
+        }
+
+        /* Link container styles */
+        .link-field {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .link-field input[type="text"] {
+            flex-grow: 1;
+            margin-right: 10px;
+        }
+
+        .add-link-button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        .add-link-button:hover {
+            background-color: #0056b3;
+        }
+
+        .messages {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+        .alert {
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 1px solid transparent;
+            border-radius: 4px;
+            color: #155724;
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+            position: relative;
+        }
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            font-size: 20px;
+            font-weight: bold;
+            color: #000;
+            cursor: pointer;
+        }
+    </style>
+
+    <script>
+        function addLinkField() {
+            var container = document.getElementById("link-container");
+            var newField = document.createElement("div");
+            newField.classList.add("link-field");
+            newField.innerHTML = '<input type="text" name="game_links" class="form-control mb-2">';
+            container.appendChild(newField);
+        }
+
+        function collectLinks() {
+            var linkFields = document.querySelectorAll('input[name="game_links"]');
+            var allLinks = [];
+            linkFields.forEach(function(field) {
+                if (field.value) {
+                    allLinks.push(field.value);
+                }
+            });
+            document.getElementById('hidden_links').value = allLinks.join('\n');
+        }
+    </script>
+
+
+{% endblock %}
+
+{% block content %}
+    <h2>Upload Game Files</h2>
+
+
+    {% if messages %}
+    <div id="message-container" class="messages">
+        {% for message in messages %}
+            <div class="alert">
+                <button class="close-btn" onclick="this.parentElement.style.display='none';">&times;</button>
+                {{ message }}
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
+
+    <form method="post" enctype="multipart/form-data" onsubmit="collectLinks()">
+        {% csrf_token %}
+        <div>
+            <label for="game_name">Game Name:</label>
+            <input type="text" id="game_name" name="game_name" required>
+        </div>
+        <div>
+            <label for="game_size">Game Size:</label>
+            <input type="text" id="game_size" name="game_size" required>
+        </div>
+        <div>
+            <label>Game Links:</label>
+            <div id="link-container">
+                <div class="link-field">
+                    <input type="text" name="game_links" class="form-control mb-2">
+                </div>
+            </div>
+            <button type="button" onclick="addLinkField()">Add Link</button>
+        </div>
+        <!-- Hidden field to store all links as a single value -->
+        <input type="hidden" id="hidden_links" name="game_links">
+        <div>
+            <button type="submit" name="upload_pdf">Generate PDF</button>
+            <button type="submit" name="upload_drive">Upload to Google Drive</button>
+        </div>
+    </form>
+
+    {% if generate_qrcode_button %}
+    <form method="post" action="{% url 'qrcode_generator:generate_qr' %}">
+        {% csrf_token %}
+        <input type="hidden" name="file_link" value="{{ file_link }}">
+        <input type="hidden" name="file_name" value="{{ file_name }}">
+        <button type="submit">Generate QR Code</button>
+    </form>
+    {% endif %}
+
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const messageContainer = document.getElementById('message-container');
+            if (messageContainer) {
+                setTimeout(() => {
+                    messageContainer.classList.add('fade-out');
+                    setTimeout(() => {
+                        messageContainer.style.display = 'none';
+                    }, 600); // match the fade-out duration
+                }, 3000); // message visible duration
+            }
+        });
+    </script>
+{% endblock %}

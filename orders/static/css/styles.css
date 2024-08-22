@@ -1,0 +1,80 @@
+/* styles.css */
+
+/* Container for dropdowns */
+.dropdown-container {
+    margin-top: 20px;
+    padding: 15px;
+    border: 1px solid #ccc;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Single dropdown */
+.single-dropdown {
+    margin-bottom: 10px;
+    padding: 10px;
+    width: 100%;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* Attachment buttons */
+.attachment-button {
+    margin-top: 10px;
+    padding: 8px 12px;
+    font-size: 14px;
+    color: #fff;
+    background-color: #007bff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.attachment-button:hover {
+    background-color: #0056b3;
+}
+
+/* Game dropdowns */
+.game-dropdown {
+    margin-top: 10px;
+    padding: 8px;
+    width: calc(25% - 10px); /* Adjust width based on layout */
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box; /* Include padding in width calculation */
+}
+
+/* Line break */
+.newline {
+    margin-top: 15px;
+    border-top: 1px solid #ccc;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .game-dropdown {
+        width: 100%; /* Full width on smaller screens */
+        margin-top: 5px;
+    }
+}
+
+
+/* styles.css */
+button {
+    background-color: #4CAF50; /* Green background */
+    color: white; /* White text */
+    padding: 10px 20px; /* Padding inside the button */
+    font-size: 16px; /* Font size */
+    border: none; /* No border */
+    cursor: pointer; /* Cursor style on hover */
+    border-radius: 5px; /* Rounded corners */
+}
+
+button:hover {
+    background-color: #45a049; /* Darker green background on hover */
+}
+
+

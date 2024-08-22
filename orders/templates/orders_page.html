@@ -1,0 +1,375 @@
+<!-- templates/qrcodes/upload_qr_codes.html -->
+{% extends 'base.html' %}
+
+{% block title %}Create Orders{% endblock %}
+
+{% block extra_css %}
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="../static/css/styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.3.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+
+    <style>
+
+        /* Add margin to the bottom of file input buttons */
+.pdf-input {
+    margin-bottom: 10px; /* Adjust the value as needed */
+}
+/* Add margin to the left of Select2 dropdowns */
+.select2-container--default .select2-selection--single {
+    margin-left: 15px; /* Adjust the value as needed */
+    margin-bottom: 5px;
+    margin-top: 5px;
+}
+/* Make text inside Select2 dropdown items smaller */
+.select2-container--default .select2-results__option {
+    font-size: 14px; /* Adjust to desired smaller font size */
+}
+
+.select2-container--default .select2-selection--single {
+    font-size: 14px; /* Adjust to match the size of dropdown items */
+}
+
+    </style>
+{% endblock %}
+
+{% block content %}
+
+    <div id="dropdownContainer">
+        <button onclick="addDropdown()">Add New Order</button>
+    </div>
+    
+    <div id="selectedImagesContainer"></div>
+    <div id="selectedFileContainer"></div> <!-- Container to display the selected file -->
+    
+    <script>
+        function addDropdown() {
+            var newDropdownContainer = document.createElement("div");
+            newDropdownContainer.classList.add("dropdown-container");
+    
+            var singleDropdown = document.createElement("select");
+            singleDropdown.classList.add("single-dropdown");
+            singleDropdown.name = "single_dropdown";
+    
+            var defaultOption = document.createElement("option");
+            defaultOption.value = "";
+            defaultOption.text = "Select";
+            singleDropdown.appendChild(defaultOption);
+    
+            {% for order in orders %}
+                var option = document.createElement("option");
+                option.value = "{{ order.id }}";
+                option.text = "{{ order.name }}";
+                singleDropdown.appendChild(option);
+            {% endfor %}
+    
+            singleDropdown.addEventListener('change', function() {
+                var selectedOrderId = this.value;
+                newDropdownContainer.innerHTML = '';
+    
+                if (selectedOrderId === "1" || selectedOrderId === "single") {
+                    for (var i = 1; i <= 2; i++) {
+                        var attachmentButtonsContainer = document.createElement("div");
+    
+                        var attachmentButton = document.createElement("input");
+                        attachmentButton.type = "file";
+                        attachmentButton.name = "attachment" + i;
+                        attachmentButton.classList.add("pdf-input");
+                        attachmentButtonsContainer.appendChild(attachmentButton);
+                        attachmentButtonsContainer.appendChild(document.createElement("br"));
+    
+                        for (var j = 1; j <= 4; j++) {
+                            var gameDropdown = document.createElement("select");
+                            gameDropdown.classList.add("game-dropdown");
+                            gameDropdown.name = "game_dropdown_" + i + "_" + j;
+    
+                            var defaultGameOption = document.createElement("option");
+                            defaultGameOption.value = "";
+                            defaultGameOption.text = "Select";
+                            gameDropdown.appendChild(defaultGameOption);
+    
+                            {% for game in games %}
+                                var option = document.createElement("option");
+                                option.value = "{{ game.id }}";
+                                option.text = "{{ game.name }}";
+                                option.setAttribute("data-image-url", "{{ game.image_url }}");
+                                gameDropdown.appendChild(option);
+                            {% endfor %}
+    
+                            attachmentButtonsContainer.appendChild(gameDropdown);
+                        }
+    
+                        newDropdownContainer.appendChild(attachmentButtonsContainer);
+                        newDropdownContainer.appendChild(document.createElement("br"));
+                    }
+                } else if (selectedOrderId === "3") {
+                    var attachmentButtonsContainer = document.createElement("div");
+    
+                    var attachmentButton = document.createElement("input");
+                    attachmentButton.type = "file";
+                    attachmentButton.name = "attachment1";
+                    attachmentButton.classList.add("pdf-input");
+                    attachmentButtonsContainer.appendChild(attachmentButton);
+                    attachmentButtonsContainer.appendChild(document.createElement("br"));
+    
+                    for (var j = 1; j <= 12; j++) {
+                        var gameDropdown = document.createElement("select");
+                        gameDropdown.classList.add("game-dropdown");
+                        gameDropdown.name = "game_dropdown_1_" + j;
+    
+                        var defaultGameOption = document.createElement("option");
+                        defaultGameOption.value = "";
+                        defaultGameOption.text = "Select";
+                        gameDropdown.appendChild(defaultGameOption);
+    
+                        {% for game in games %}
+                            var option = document.createElement("option");
+                            option.value = "{{ game.id }}";
+                            option.text = "{{ game.name }}";
+                            option.setAttribute("data-image-url", "{{ game.image_url }}");
+                            gameDropdown.appendChild(option);
+                        {% endfor %}
+    
+                        attachmentButtonsContainer.appendChild(gameDropdown);
+                    }
+    
+                    newDropdownContainer.appendChild(attachmentButtonsContainer);
+                    newDropdownContainer.appendChild(document.createElement("br"));
+                }
+    
+                var createFileButton = document.createElement("button");
+                createFileButton.textContent = "Create File";
+                createFileButton.type = "button";
+                createFileButton.addEventListener('click', function() {
+                    var selectedImages = [];
+                    var gameDropdowns = newDropdownContainer.querySelectorAll(".game-dropdown");
+                    gameDropdowns.forEach(function(dropdown) {
+                        var selectedOption = dropdown.options[dropdown.selectedIndex];
+                        if (selectedOption.value) {
+                            selectedImages.push(selectedOption.getAttribute("data-image-url"));
+                        }
+                    });
+    
+                    var fileInputs = newDropdownContainer.querySelectorAll(".pdf-input");
+                    clearContainer("selectedFileContainer"); // Clear the container before displaying new files
+                    var pdfFiles = [];
+                    fileInputs.forEach(function(input) {
+                        if (input.files.length > 0) {
+                            var file = input.files[0];
+                            pdfFiles.push(file);
+                        }
+                    });
+    
+                    if (selectedOrderId === "1" || selectedOrderId === "single") {
+                        processOrder1(pdfFiles, selectedImages);
+                    } else if (selectedOrderId === "3") {
+                        processOrder3(pdfFiles, selectedImages);
+                    }
+                });
+                newDropdownContainer.appendChild(createFileButton);
+    
+                // Initialize Select2 on game dropdowns
+                $(newDropdownContainer).find('.game-dropdown').select2();
+            });
+    
+            newDropdownContainer.appendChild(singleDropdown);
+            document.getElementById("dropdownContainer").appendChild(newDropdownContainer);
+        }
+    
+        function displaySelectedImages(imageUrls) {
+            var container = document.getElementById("selectedImagesContainer");
+            container.innerHTML = '';
+            imageUrls.forEach(function(url) {
+                var img = document.createElement("img");
+                img.src = url;
+                img.style.width = '800px';
+                img.style.height = '1000px';
+                container.appendChild(img);
+            });
+        }
+    
+        function convertPdfToImage(file, callback, scale = 3.0) { // Higher scale factor for better quality
+    var reader = new FileReader();
+    reader.onload = function() {
+        var pdfData = new Uint8Array(this.result);
+
+        pdfjsLib.getDocument({data: pdfData}).promise.then(function(pdf) {
+            pdf.getPage(1).then(function(page) {
+                var viewport = page.getViewport({scale: scale});
+                var canvas = document.createElement("canvas");
+                var context = canvas.getContext("2d", { alpha: false }); // Disable alpha for better performance
+                canvas.height = viewport.height;
+                canvas.width = viewport.width;
+
+                var renderContext = {
+                    canvasContext: context,
+                    viewport: viewport,
+                    intent: 'print'  // Use 'print' intent for higher quality
+                };
+
+                page.render(renderContext).promise.then(function() {
+                    var img = document.createElement("img");
+                    img.src = canvas.toDataURL("image/png", 10.0); // Use PNG format for better quality
+                    img.style.width = 'auto'; // Adjust as needed for display
+                    img.style.height = 'auto';
+
+                    callback(img);
+                });
+            });
+        });
+    };
+    reader.readAsArrayBuffer(file);
+}
+
+        document.getElementById("fileInput").addEventListener("change", function(event) {
+            var file = event.target.files[0];
+            convertPdfToImage(file, function(img) {
+                document.body.appendChild(img); // Append the image to the body or any other container
+            }, 10.0); // Set a higher scale factor for better quality
+        });
+    
+        function displaySelectedFile(img) {
+            var container = document.getElementById("selectedFileContainer");
+            container.appendChild(img);
+        }
+    
+        function clearContainer(containerId) {
+            var container = document.getElementById(containerId);
+            container.innerHTML = '';
+        }
+    
+        function processOrder1(pdfFiles, selectedImages) {
+            var canvasWidth = 800; // Canvas width
+            var canvasHeight = 1000; // Canvas height
+            var marginX = 15; // Horizontal margin between images
+            var marginY = 10; // Vertical margin between images
+            var imgWidth = 186; // Width of each image
+            var imgHeight = 230; // Height of each image
+            var marginLeft = 60;
+            var canvas = document.createElement("canvas");
+            var context = canvas.getContext("2d");
+            canvas.width = canvasWidth;
+            canvas.height = canvasHeight;
+    
+            // Fill canvas with white background
+            context.fillStyle = '#ffffff'; // White color
+            context.fillRect(0, 0, canvasWidth, canvasHeight); // Fill entire canvas with white
+    
+            // Load and draw PDF images
+            Promise.all(pdfFiles.map(file => new Promise((resolve) => {
+                convertPdfToImage(file, resolve);
+            }))).then(pdfImages => {
+                // Draw PDF images
+                if (pdfImages.length > 0) {
+                    context.drawImage(pdfImages[0], -15, -15, 360, 520); // Left upper
+                }
+                if (pdfImages.length > 1) {
+                    context.drawImage(pdfImages[1], -15, 490, 360, 520); // Left bottom
+                }
+    
+                // Draw selected images
+                selectedImages.forEach((url, index) => {
+                    var img = new Image();
+                    img.onload = function() {
+                        var x = 340 + marginLeft  +(index % 2) * (imgWidth + marginX); // Right side positions adjusted for 2 columns
+                        var y = (index < 4 ? 0 : 505) + Math.floor((index % 4) / 2) * (imgHeight + marginY) + 10; // Upper or lower right side with 20px top margin and vertical margin
+                        context.drawImage(img, x, y, imgWidth, imgHeight); // Draw image with 186 width and 230 height
+                    };
+                    img.src = url;
+                });
+    
+                setTimeout(() => saveCanvasAsPDF(canvas), 1000); // Wait for all images to load and draw
+            });
+        }
+    
+        function processOrder3(pdfFiles, selectedImages) {
+            var canvasWidth = 800; // Canvas width
+            var canvasHeight = 1000; // Canvas height
+            var marginX = 10; // Margin between images horizontally
+            var marginY = 50; // Margin between images vertically
+            var extraBottomMargin = 20; // Extra margin for bottom rows
+            var marginLeftThirdFourthRow = 10; // Left margin for third and fourth rows
+            var marginTopAllRows = 10; // Top margin for all rows
+            var rowSpacing = 40; // Spacing between rows
+            var rowSpacing4 = 50; // Extra spacing between third and fourth rows
+            var marginleft12Row = 60;
+            var canvas = document.createElement("canvas");
+            var context = canvas.getContext("2d");
+            canvas.width = canvasWidth;
+            canvas.height = canvasHeight;
+    
+            // Set white background
+            context.fillStyle = '#ffffff'; // White color
+            context.fillRect(0, 0, canvasWidth, canvasHeight); // Fill entire canvas with white
+    
+            // Load and draw PDF images
+            Promise.all(pdfFiles.map(file => new Promise((resolve) => {
+                convertPdfToImage(file, resolve);
+            }))).then(pdfImages => {
+                // Draw PDF images
+                if (pdfImages.length > 0) {
+                    context.drawImage(pdfImages[0], 0, 0, 340, 505); // Left upper quadrant
+                }
+    
+                // Draw selected images
+                selectedImages.forEach((url, index) => {
+                    var img = new Image();
+                    img.onload = function() {
+                        var x, y;
+                        var imageWidth = 186; // Adjusted width for each image
+                        var imageHeight = 230; // Adjusted height for each image
+    
+                        if (index < 2) { // Top row
+                            x = 340 + (index * (imageWidth + marginX)) + marginleft12Row; // Adjusted x position with left margin
+                            y = marginTopAllRows; // Top margin
+                        } else if (index < 4) { // Second row
+                            x = 340 + ((index - 2) * (imageWidth + marginX)) + marginleft12Row; // Adjusted x position with left margin
+                            y = 210 + marginY + marginTopAllRows; // Adjusted y position with margin top
+                        } else if (index < 8) { // Third row
+                            x = (index - 4) * (imageWidth + marginX) + marginLeftThirdFourthRow; // Adjusted x position with left margin
+                            y = 420 + marginY + marginTopAllRows + rowSpacing; // Adjusted y position with extra bottom margin, top margin, and row spacing
+                        } else if (index < 12) { // Fourth row
+                            x = (index - 8) * (imageWidth + marginX) + marginLeftThirdFourthRow; // Adjusted x position with left margin
+                            y = 630 + marginY + extraBottomMargin + marginTopAllRows + rowSpacing4; // Adjusted y position with extra bottom margin and top margin
+                        }
+    
+                        context.drawImage(img, x, y, imageWidth, imageHeight);
+                    };
+                    img.src = url;
+                });
+    
+                setTimeout(() => saveCanvasAsPDF(canvas), 1000); // Wait for all images to load and draw
+            });
+        }
+    
+
+        function saveCanvasAsPDF(canvas) {
+    var { jsPDF } = window.jspdf;
+
+    // Create a high resolution canvas
+    var scale = 3; // Increase this value for even higher resolution
+    var scaledCanvas = document.createElement('canvas');
+    scaledCanvas.width = canvas.width * scale;
+    scaledCanvas.height = canvas.height * scale;
+    var context = scaledCanvas.getContext('2d');
+    context.scale(scale, scale);
+    context.drawImage(canvas, 0, 0);
+
+    // Convert the scaled canvas to a data URL with highest quality
+    var imageData = scaledCanvas.toDataURL('image/png', 5.0); // 1.0 is the highest quality
+
+    // Create the PDF with high resolution settings
+    var pdf = new jsPDF({
+        orientation: 'portrait',
+        unit: 'px',
+        format: [canvas.width, canvas.height]
+    });
+
+    pdf.addImage(imageData, 'PNG', 0, 0, canvas.width, canvas.height, undefined, 'SLOW'); // 'SLOW' compression for better quality
+    pdf.save('output.pdf');
+}
+    </script>
+  {% endblock %}

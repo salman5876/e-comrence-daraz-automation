@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}My Django App{% endblock %}</title>
+    {% load static %}
+    <style>
+        /* Reset some default browser styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Body styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            background-color: #f4f4f9;
+        }
+
+        /* Container styles */
+        .container {
+            max-width: 960px;
+            margin: 20px auto;
+            background-color: #fff;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        /* Header styles */
+        header {
+            background-color: #4CAF50;
+            color: #fff;
+            padding: 20px 0;
+            border-bottom: 5px solid #2c6e49;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        nav {
+            text-align: center;
+        }
+
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: nowrap; /* Ensure items stay in one line */
+            gap: 15px; /* Space between items */
+        }
+
+        nav ul li {
+            position: relative;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: #fff;
+            font-size: 1rem; /* Adjust font size if necessary */
+            padding: 10px 20px;
+            border-radius: 10px;
+            transition: all 0.4s ease;
+            background: linear-gradient(145deg, #5ccc60, #4CAF50);
+            display: inline-block;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        nav ul li a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.2);
+            transform: scaleX(0);
+            transform-origin: bottom right;
+            transition: transform 0.4s ease;
+        }
+
+        nav ul li a:hover::before {
+            transform: scaleX(1);
+            transform-origin: bottom left;
+        }
+
+        nav ul li a:hover {
+            background: linear-gradient(145deg, #225c40, #4CAF50);
+            color: #fff;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+            border: 1px solid #a09d9d;
+        }
+
+        /* Main content styles */
+        main {
+            padding: 20px 0;
+            text-align: center;
+        }
+
+        /* Footer styles */
+        footer {
+            text-align: center;
+            margin-top: 20px;
+            padding-top: 10px;
+            border-top: 1px solid #ccc;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive styles */
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2rem;
+            }
+
+            nav ul {
+                flex-direction: column; /* Stack items vertically on small screens */
+                gap: 5px; /* Adjust space between items on small screens */
+            }
+
+            nav ul li a {
+                font-size: 1.1rem; /* Adjust font size on small screens if necessary */
+            }
+        }
+    </style>
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="{% url 'orders:orders' %}">Create Order</a></li>
+                <li><a href="{% url 'qrcodes:upload_qr_codes' %}">Upload QR</a></li>
+                <li><a href="{% url 'manage_qrcodes:game_list' %}">Manage QR</a></li>
+                <li><a href="{% url 'merge:merge' %}">Merge Files</a></li>
+                <li><a href="{% url 'gamelist:gamelist' %}">Create List</a></li>
+                <li><a href="{% url 'uploadgamefiles:uploadgamefiles' %}">Create Files</a></li>
+                <li><a href="{% url 'qrcode_generator:generate_qr' %}">Generate QR</a></li>
+                <li><a href="{% url 'canceled_orders:canceled_orders' %}">Cancelation</a></li>
+                <!-- Add links to other apps as needed -->
+            </ul>
+        </nav>
+    </header>
+    <main>
+        {% block content %}
+        <!-- Your main content here -->
+        {% endblock %}
+    </main>
+    <footer>
+        <p>&copy; 2024 Daraz</p>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,67 @@
+<!-- gamelist/templates/gamelist/result.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generated Game Lists</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .image-container {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .image-container img {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 5px;
+            background: #fff;
+        }
+        .download-button {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 10px 20px;
+            background-color: #008f1f;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        .download-button:hover {
+            background-color: #4fce6b;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Generated Game Lists</h1>
+        {% for image in images %}
+            <div class="image-container">
+                <img src="{{ image }}" alt="Game List Image">
+                <a href="{{ image }}" class="download-button" download>Download Image</a>
+            </div>
+        {% endfor %}
+    </div>
+</body>
+</html>

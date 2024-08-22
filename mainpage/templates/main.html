@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MainPage</title>
+    <style>
+        /* Reset some default browser styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Body styles */
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            background-color: #f4f4f9;
+        }
+
+        /* Container styles */
+        .container {
+            max-width: 960px;
+            margin: 20px auto;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        /* Header styles */
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        header h1 {
+            color: #333;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        nav ul {
+            list-style-type: none;
+            text-align: center;
+        }
+
+        nav ul li {
+            display: inline-block;
+            margin: 10px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: #666;
+            font-size: 1.2rem;
+            padding: 10px 20px;
+            border: 2px solid #4CAF50;
+            border-radius: 6px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            background-color: #fff;
+            display: inline-block;
+        }
+
+        nav ul li a:hover {
+            background-color: #4CAF50;
+            color: #fff;
+        }
+
+        /* Main content styles */
+        main {
+            padding: 20px 0;
+            text-align: center;
+        }
+
+        /* Footer styles */
+        footer {
+            text-align: center;
+            margin-top: 20px;
+            padding-top: 10px;
+            border-top: 1px solid #ccc;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive styles */
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+
+            header h1 {
+                font-size: 2rem;
+            }
+
+            nav ul li {
+                display: block;
+                margin-bottom: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Main Page</h1>
+            <nav>
+                <ul>
+                    
+                    <li><a href="{% url 'orders:orders' %}">Orders App</a></li>
+                    <li><a href="{% url 'qrcodes:upload_qr_codes' %}">Upload QR Codes</a></li>
+                    <li><a href="{% url 'manage_qrcodes:game_list' %}">Manage QR Codes</a></li>
+
+                    <li><a href="{% url 'merge:merge' %}">Merge Files</a></li>
+                    <li><a href="{% url 'gamelist:gamelist' %}">Create List</a></li>
+                    <li><a href="{% url 'uploadgamefiles:uploadgamefiles' %}">Create Game Files</a></li>
+                    <li><a href="{% url 'canceled_orders:canceled_orders' %}">Cancelation Management</a></li>
+                    <li><a href="{% url 'qrcode_generator:generate_qr' %}">Generate QR Code</a></li>
+
+                    <!-- Add links to other apps as needed -->
+                </ul>
+            </nav>
+        </header>
+        <main>
+            <!-- Your main content here -->
+        </main>
+        <footer>
+            <p>&copy; 2024 Daraz</p>
+        </footer>
+    </div>
+</body>
+</html>

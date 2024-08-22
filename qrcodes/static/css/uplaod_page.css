@@ -1,0 +1,131 @@
+/* General styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+    margin: 0;
+    padding: 20px;
+}
+
+h2 {
+    text-align: center;
+    color: #333;
+}
+
+/* Form container */
+form {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Form labels */
+form label {
+    display: block;
+    margin-bottom: 10px;
+    color: #555;
+}
+
+/* Form inputs */
+form input[type="file"],
+form input[type="number"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+/* File input special styles */
+form input[type="file"] {
+    padding: 3px;
+}
+
+/* Submit button */
+form button[type="submit"] {
+    width: 100%;
+    padding: 10px;
+    background-color: #4CAF50;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+/* Submit button hover effect */
+form button[type="submit"]:hover {
+    background-color: #45a049;
+}
+
+button[type="submit"] {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+button[type="submit"]:hover {
+    background-color: #0056b3;
+}
+
+/* File input specific styles */
+form input[type="file"] {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #fff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    box-sizing: border-box;
+    position: relative; /* Ensure positioning context */
+    overflow: hidden; /* Hide default file input button */
+}
+
+/* File input hover effect */
+form input[type="file"]:hover {
+    border-color: #007bff;
+}
+
+/* File input focus effect */
+form input[type="file"]:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+/* Customizing the file selector button */
+form input[type="file"]::file-selector-button {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    position: absolute;
+    right: 0;
+    top: 0;
+    margin: 0;
+    height: 100%;
+    opacity: 0;
+}
+
+/* Style the label for file input */
+form label[for="image_folder"] {
+    display: block;
+    margin-bottom: 10px;
+    color: #555;
+}
+
+/* Adjust file input padding for different states */
+form input[type="file"]:not(:focus):not(:hover) {
+    padding: 10px;
+}

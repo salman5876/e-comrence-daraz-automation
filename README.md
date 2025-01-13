@@ -36,3 +36,6 @@ A comprehensive Django-based web application designed to automate, optimize, and
 
 ## Contributions
 Contributions are welcome! Please fork the repository and create a pull request.
+
+## Images
+

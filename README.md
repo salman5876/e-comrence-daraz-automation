@@ -37,5 +37,9 @@ A comprehensive Django-based web application designed to automate, optimize, and
 ## Contributions
 Contributions are welcome! Please fork the repository and create a pull request.
 
+## Note: 
+The code for this project has not been shared directly. 
+However, if anyone wants a demo or needs the project, feel free to contact me via email: mughalsalman616@gmail.com.
+
 ## Images
 
